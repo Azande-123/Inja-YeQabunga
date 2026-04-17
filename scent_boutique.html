@@ -1,51 +1,1295 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scent Boutique</title>
-    <script>
-        // Centralized CONFIG Object
-        const CONFIG = {
-            genderValues: {
-                male: 'Male',
-                female: 'Female',
-                other: 'Other'
-            },
-            // Add other configuration options here
-        };
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Scent Boutique — Luxury Fragrances</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        // Event delegation to handle adding items
-        document.addEventListener('click', function(event) {
-            if (event.target.matches('.add-to-cart')) {
-                addToCart(event.target.dataset.itemId);
-            }
-        });
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #f0d080;
+    --gold-dark: #9a7530;
+    --cream: #faf8f3;
+    --dark: #1a1612;
+    --dark2: #2a2420;
+    --text: #3a3028;
+    --text-muted: #8a7a6a;
+    --card-bg: #ffffff;
+    --surface: #ffffff;
+    --surface-soft: #f9f6f0;
+    --surface-alt: #f0ece2;
+    --border: rgba(201,168,76,0.2);
+    --background: var(--cream);
+    --wa-green: #25D366;
+  }
 
-        function addToCart(itemId) {
-            // Logic to add item to cart
-            console.log(`Item ${CONFIG.genderValues[itemId]} added to cart!`);
-        }
-    </script>
+  .dark-theme {
+    --cream: #141414;
+    --dark: #f7f3ec;
+    --dark2: #d8d4cc;
+    --text: #f5efe8;
+    --text-muted: #b5ac99;
+    --card-bg: #1f1c18;
+    --surface: #1d1b18;
+    --surface-soft: #25221c;
+    --surface-alt: #302c27;
+    --border: rgba(255,255,255,0.08);
+    --background: #121212;
+    --gold: #d4b15b;
+    --gold-light: #f2d986;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 5px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 300;
+    color: var(--dark);
+    line-height: 1;
+    letter-spacing: 2px;
+  }
+
+  header h1 em { font-style: italic; color: var(--gold); }
+
+  .header-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 1.5rem auto;
+  }
+
+  .header-divider span {
+    display: inline-block;
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .header-divider span:last-child { background: linear-gradient(90deg, var(--gold), transparent); }
+
+  .header-divider svg { width: 14px; height: 14px; fill: var(--gold); opacity: 0.7; }
+
+  header p {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 1.5px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .theme-toggle-wrap {
+    position: absolute;
+    top: 1.8rem;
+    right: 2rem;
+  }
+
+  .theme-toggle {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    border-radius: 40px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+
+  .theme-toggle:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold);
+  }
+
+  /* ── SEARCH + FILTERS ── */
+  .search-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 380px;
+    padding: 10px 18px 10px 42px;
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    background: var(--surface);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,168,76,0.1); }
+
+  .search-wrap .search-icon {
+    position: absolute;
+    left: calc(50% - 190px + 14px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    fill: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 1.2rem 1rem 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .filter-btn {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 7px 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #fff;
+  }
+
+  /* ── RESULTS COUNT ── */
+  .results-bar {
+    text-align: center;
+    padding: 1rem 2rem 0;
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ── GRID ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+    padding: 2rem 2rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 0 0 1px rgba(201,168,76,0.3);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.1s}.card:nth-child(3){animation-delay:.15s}.card:nth-child(4){animation-delay:.2s}.card:nth-child(5){animation-delay:.25s}.card:nth-child(6){animation-delay:.3s}.card:nth-child(7){animation-delay:.35s}.card:nth-child(8){animation-delay:.4s}.card:nth-child(9){animation-delay:.45s}.card:nth-child(10){animation-delay:.5s}.card:nth-child(11){animation-delay:.55s}
+
+  .card.hidden { display: none; }
+
+  .img-wrap {
+    position: relative;
+    background: linear-gradient(160deg, var(--surface-soft) 0%, var(--surface-alt) 100%);
+    height: 260px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .img-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.07), transparent 70%);
+    pointer-events: none;
+  }
+
+  .img-wrap img {
+    max-height: 90%;
+    max-width: 90%;
+    object-fit: contain;
+    mix-blend-mode: normal;
+    transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.12));
+  }
+
+  .card:hover .img-wrap img { transform: scale(1.08) translateY(-4px); }
+
+  .badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: var(--dark);
+    color: var(--gold-light);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  /* Wishlist button */
+  .wishlist-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+  }
+
+  .wishlist-btn:hover { border-color: var(--gold); }
+  .wishlist-btn.active svg { fill: #e05555; stroke: #e05555; }
+
+  .wishlist-btn svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: var(--text-muted);
+    stroke-width: 1.5;
+    transition: all 0.2s;
+  }
+
+  .info {
+    padding: 1.25rem 1.4rem 1.4rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-top: 1px solid var(--border);
+  }
+
+  .gender-tag {
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--dark);
+    line-height: 1.25;
+  }
+
+  .desc {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+    flex: 1;
+    margin-top: 2px;
+  }
+
+  .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--gold-dark);
+    margin-top: 4px;
+  }
+
+  .wa-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--wa-green);
+    color: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.7rem 1rem;
+    border-radius: 2px;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 0.75rem;
+  }
+
+  .wa-btn:hover { background: #1da851; transform: scale(1.02); }
+  .wa-btn svg { width: 16px; height: 16px; fill: #fff; flex-shrink: 0; }
+
+  /* ── "NOT FOUND" BANNER ── */
+  .not-found-banner {
+    grid-column: 1 / -1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    display: none;
+  }
+
+  .not-found-banner .nf-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .not-found-banner h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--dark);
+    margin-bottom: 0.5rem;
+  }
+
+  .not-found-banner p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .not-found-banner .btn-ask {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--wa-green);
+    color: #fff;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.8rem 1.8rem;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+
+  .not-found-banner .btn-ask:hover { background: #1da851; }
+  .not-found-banner .btn-ask svg { width: 16px; height: 16px; fill: #fff; }
+
+  /* ── "CAN'T FIND IT?" CARD ── */
+  .cant-find-card {
+    background: linear-gradient(160deg, var(--surface-soft), var(--surface-alt));
+    border: 1.5px dashed rgba(201,168,76,0.4);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 380px;
+    cursor: pointer;
+    transition: border-color 0.25s, background 0.25s;
+    padding: 2rem;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .cant-find-card:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
+  .cant-find-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cant-find-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--gold); stroke-width: 1.5; }
+
+  .cant-find-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--dark);
+  }
+
+  .cant-find-sub {
+    font-size: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    max-width: 180px;
+    line-height: 1.6;
+  }
+
+  /* ── ADD CARD ── */
+  .add-card {
+    background: transparent;
+    border: 1.5px dashed rgba(201,168,76,0.25);
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 380px;
+    cursor: pointer;
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .add-card:hover { border-color: var(--gold); background: rgba(201,168,76,0.04); }
+
+  .add-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+
+  .add-label { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+
+  /* ── MODALS SHARED ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,22,18,0.75);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: modalIn 0.3s cubic-bezier(0.22,1,0.36,1);
+    position: relative;
+    margin: auto;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--dark);
+  }
+
+  .modal-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-top: -0.75rem;
+    line-height: 1.6;
+  }
+
+  .modal label {
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .modal input, .modal textarea, .modal select {
+    width: 100%;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text);
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .modal input:focus, .modal textarea:focus, .modal select:focus { border-color: var(--gold); }
+  .modal textarea { resize: vertical; min-height: 80px; }
+
+  .preview-wrap {
+    width: 100%;
+    height: 160px;
+    background: linear-gradient(160deg, var(--surface-soft), var(--surface-alt));
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .preview-wrap img { max-height: 100%; max-width: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
+  /* Image upload drop zone */
+  .img-drop-zone {
+    width: 100%;
+    border: 1.5px dashed rgba(201,168,76,0.4);
+    border-radius: 2px;
+    padding: 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    background: var(--surface);
+    position: relative;
+  }
+
+  .img-drop-zone:hover, .img-drop-zone.drag-over { border-color: var(--gold); background: rgba(201,168,76,0.04); }
+
+  .img-drop-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .img-drop-zone svg { width: 24px; height: 24px; fill: none; stroke: var(--gold); stroke-width: 1.5; margin-bottom: 8px; }
+  .img-drop-zone p { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.5px; pointer-events: none; }
+  .img-drop-zone p span { color: var(--gold); text-decoration: underline; }
+  .img-drop-zone .drop-preview { max-height: 80px; max-width: 100%; object-fit: contain; display: none; border-radius: 2px; }
+
+  .modal-btns { display: flex; gap: 12px; }
+
+  .btn-gold {
+    flex: 1;
+    padding: 0.75rem;
+    background: var(--gold);
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .btn-gold:hover { background: var(--gold-dark); }
+
+  .btn-wa {
+    flex: 1;
+    padding: 0.75rem;
+    background: var(--wa-green);
+    color: #fff;
+    border: none;
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+
+  .btn-wa:hover { background: #1da851; }
+  .btn-wa svg { width: 14px; height: 14px; fill: #fff; }
+
+  .btn-outline {
+    flex: 1;
+    padding: 0.75rem;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--dark);
+    color: var(--gold-light);
+    font-size: 0.75rem;
+    letter-spacing: 1.5px;
+    padding: 10px 22px;
+    border-radius: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 2000;
+    white-space: nowrap;
+  }
+
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+  }
+
+  footer p { font-size: 0.75rem; font-weight: 300; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+
+  /* ── WHATSAPP FLOAT ── */
+  .wa-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    background: var(--wa-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    text-decoration: none;
+    z-index: 100;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pulse 2.5s infinite;
+  }
+
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.55); animation: none; }
+  .wa-float svg { width: 28px; height: 28px; fill: #fff; }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+    50% { box-shadow: 0 4px 32px rgba(37,211,102,0.65); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .grid { padding: 2rem 1rem 3rem; gap: 1.25rem; }
+    header { padding: 3rem 1.5rem 2rem; }
+    .modal { padding: 1.75rem; }
+    .search-wrap .search-icon { left: 28px; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to the Scent Boutique</h1>
-    </header>
 
-    <main>
-        <section>
-            <h2>Products</h2>
-            <div>
-                <button class="add-to-cart" data-item-id="male">Add Male Scent</button>
-                <button class="add-to-cart" data-item-id="female">Add Female Scent</button>
-                <button class="add-to-cart" data-item-id="other">Add Other Scent</button>
-            </div>
-        </section>
-    </main>
+<header>
+  <div class="eyebrow">✦ Curated Luxury Collection ✦</div>
+  <h1>Inja <em>YeQabunga</em></h1>
+  <div class="header-divider">
+    <span></span>
+    <svg viewBox="0 0 16 16"><path d="M8 0 L9.5 6 L16 6 L10.8 9.8 L12.9 16 L8 12.2 L3.1 16 L5.2 9.8 L0 6 L6.5 6 Z"/></svg>
+    <span></span>
+  </div>
+  <p>Discover your signature scent — chat with us on WhatsApp to order</p>
+  <div class="theme-toggle-wrap">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">Dark theme</button>
+  </div>
+</header>
 
-    <footer>
-        <p>© 2026 Scent Boutique. All rights reserved.</p>
-    </footer>
+<!-- Search -->
+<div class="search-wrap">
+  <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2" stroke="currentColor" fill="none"/><path d="M16.5 16.5 L21 21" stroke-width="2" stroke="currentColor" stroke-linecap="round"/></svg>
+  <input class="search-input" type="text" id="search-input" placeholder="Search by name or scent notes..." oninput="applyFilter()" />
+</div>
+
+<!-- Filters -->
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all', this)">All</button>
+  <button class="filter-btn" onclick="filter('For Her', this)">For Her</button>
+  <button class="filter-btn" onclick="filter('For Him', this)">For Him</button>
+  <button class="filter-btn" onclick="filter('Unisex', this)">Unisex</button>
+</div>
+
+<!-- Results count -->
+<div class="results-bar" id="results-bar"></div>
+
+<div class="grid" id="grid"></div>
+
+<!-- ── CUSTOM REQUEST MODAL ── -->
+<div class="modal-overlay" id="custom-modal">
+  <div class="modal">
+    <div class="modal-title">Can't Find What You're Looking For?</div>
+    <p class="modal-subtitle">Tell us what you have in mind — we'll check availability and get back to you on WhatsApp.</p>
+
+    <div>
+      <label>Fragrance name / brand</label>
+      <input type="text" id="req-name" placeholder="e.g. Baccarat Rouge 540, Oud for Greatness..." />
+    </div>
+
+    <div>
+      <label>Any scent notes you love?</label>
+      <input type="text" id="req-notes" placeholder="e.g. oud, vanilla, fresh citrus, rose..." />
+    </div>
+
+    <div>
+      <label>Your WhatsApp number</label>
+      <input type="tel" id="req-phone" placeholder="e.g. 0821234567" />
+    </div>
+
+    <div>
+      <label>Upload a reference photo <span style="font-size:0.65rem;color:var(--gold)">(optional — bottle, ad, screenshot)</span></label>
+      <div class="img-drop-zone" id="drop-zone">
+        <input type="file" id="req-image" accept="image/*" onchange="handleImageUpload(this)" />
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <p id="drop-text">Drag & drop or <span>browse</span></p>
+        <img class="drop-preview" id="drop-preview" alt="preview" />
+      </div>
+    </div>
+
+    <div>
+      <label>Additional message <span style="font-size:0.65rem;color:var(--gold)">(optional)</span></label>
+      <textarea id="req-msg" placeholder="e.g. Looking for something similar to Sauvage but more affordable..."></textarea>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-outline" onclick="closeCustomModal()">Cancel</button>
+      <button class="btn-wa" id="send-request-btn" onclick="sendCustomRequest()">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Send via WhatsApp
+      </button>
+    </div>
+
+    <p style="font-size:0.72rem;color:var(--text-muted);text-align:center;line-height:1.6;">
+      Note: The photo cannot be sent automatically — WhatsApp will open pre-filled. You can then attach your image in the chat before sending.
+    </p>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- WhatsApp Float Button -->
+<a class="wa-float" href="https://wa.me/27627532432?text=Hi!%20I%20saw%20your%20fragrance%20collection%20and%20would%20love%20to%20know%20more%20%F0%9F%8C%B8" target="_blank" title="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<footer>
+  <p>The Scent Boutique &nbsp;✦&nbsp; All fragrances 100ml Eau de Parfum</p>
+</footer>
+
+<script>
+  const WHATSAPP_NUMBER = "27627532432";
+
+  const perfumes = [
+    {
+      name: "Khumar Caramel",
+      gender: "For Her",
+      desc: "Sweet caramel & warm amber — a gourmand hug in a bottle",
+      img: "Perfume Pics/Khumar Caramel.png",
+      badge: "Best Seller",
+      price: 750
+    },
+    {
+      name: "Night Club",
+      gender: "For Him",
+      desc: "Dark woods, black musk & spice — bold, seductive, unforgettable",
+      img: "Perfume Pics/Night Club.png",
+      badge: "For Him",
+      price: 680
+    },
+    {
+      name: "Champ de Rose Jacques Yves",
+      gender: "For Her",
+      desc: "Fresh rose petals & soft powder — effortlessly elegant",
+      img: "Perfume Pics/Champ de Rose Jacques Yves.png",
+      badge: "For Her",
+      price: 720
+    },
+    {
+      name: "Berries Weekend Pink Edition",
+      gender: "For Her",
+      desc: "Berry blooms & saffron — playful, fruity and romantically warm",
+      img: "Perfume Pics/Berries Weekend Pink Edition.png",
+      badge: "New",
+      price: 690
+    },
+    {
+      name: "Barakkat Rouge 540",
+      gender: "Unisex",
+      desc: "Amberwood, jasmine & saffron — the iconic scent, reimagined",
+      img: "Perfume Pics/Barakkat Rouge 540.png",
+      badge: "Fan Fave",
+      price: 850
+    },
+    {
+      name: "Tool Box",
+      gender: "For Him",
+      desc: "Rugged vetiver, leather & cedarwood — raw masculine energy",
+      img: "Perfume Pics/Tool Box.png",
+      badge: "For Him",
+      price: 700
+    },
+    {
+      name: "Barakkat Satin Oud",
+      gender: "Unisex",
+      desc: "Rich oud, velvety smoke & dark musk — deeply luxurious",
+      img: "Perfume Pics/Barakkat Satin Oud.png",
+      badge: "Luxury",
+      price: 950
+    },
+    {
+      name: "Khumar Sugar",
+      gender: "Female",
+      desc: "Powdered sugar, vanilla orchid & clean linen — soft, sweet and delicately addictive",
+      img: "Perfume Pics/Khumar Sugar.png",
+      badge: "Sweet",
+      price: 780
+    },
+    {
+      name: "Lady Presidente",
+      gender: "For Her",
+      desc: "Red rose, patchouli & warm amber — powerful and alluring",
+      img: "Perfume Pics/Lady Presidente.png",
+      badge: "Statement",
+      price: 800
+    },
+    {
+      name: "Oud Al Layl",
+      gender: "Unisex",
+      desc: "Night oud, sandalwood & spice — deeply oriental and timeless",
+      img: "Perfume Pics/Oud Al Layl.png",
+      badge: "Arabic",
+      price: 850
+    },
+    {
+      name: "Intimation",
+      gender: "Unisex",
+      desc: "Crisp aquatic notes, clean musk & citrus — fresh and airy",
+      img: "Perfume Pics/Intimation.png",
+      badge: "Fresh",
+      price: 750
+    },
+    {
+      name: "Fakhar",
+      gender: "Male",
+      desc: "Pistachio, creamy almond & soft white florals — nutty, smooth and unexpectedly charming",
+      img: "Perfume Pics/Fakhar.png",
+      badge: "Gourmand",
+      price: 720
+    },
+    {
+      name: "Invicto intense",
+      gender: "Male",
+      desc: "Sea salt, smoky incense & tonka bean — aquatic yet fierce, with dark depth",
+      img: "Perfume Pics/Invicto intense.png",
+      badge: "Aquatic",
+      price: 680
+    },
+    {
+      name: "MAAHIR BLACK LATTAFA",
+      gender: "Male",
+      desc: "Black pepper, smoky leather & oud — sharp, rebellious and unapologetically bold",
+      img: "Perfume Pics/MAAHIR BLACK LATTAFA.png",
+      badge: "Woody",
+      price: 750
+    },
+    {
+      name: "Ophylia for women",
+      gender: "Female",
+      desc: "White flowers, pear nectar & creamy sandalwood — elegant, fresh and softly radiant",
+      img: "Perfume Pics/Ophylia for women.png",
+      badge: "Floral",
+      price: 700
+    },
+    {
+      name: "Salvo intense",
+      gender: "Male",
+      desc: "Bergamot, black pepper & vetiver — crisp, aromatic and powerfully modern",
+      img: "Perfume Pics/Salvo intense.png",
+      badge: "Aromatic",
+      price: 720
+    },
+    {
+      name: "Scandant",
+      gender: "Female",
+      desc: "Red berries, jasmine & praline — sweet, sparkling and playfully seductive",
+      img: "Perfume Pics/Scandant.png",
+      badge: "Sweet",
+      price: 750
+    },
+    {
+      name: "Club de Nuit intense",
+      gender: "For Him",
+      desc: "Intense leather, tobacco & dark spices — bold, mysterious and irresistibly seductive",
+      img: "Perfume Pics/Club de Nuit intense.png",
+      badge: "Intense",
+      price: 780
+    },
+    {
+      name: "MAAHIR GOLD LATTAFA",
+      gender: "Male",
+      desc: "Golden amber, saffron & precious woods — luxurious, warm and elegantly refined",
+      img: "Perfume Pics/MAAHIR GOLD LATTAFA.png",
+      badge: "Luxury",
+      price: 800
+    },
+    {
+      name: "Spectre",
+      gender: "Unisex",
+      desc: "Shadowy vetiver, smoky incense & midnight florals — enigmatic, dark and hauntingly beautiful",
+      img: "Perfume Pics/Spectre.png",
+      badge: "Mysterious",
+      price: 720
+    },
+    {
+      name: "Tobacco Gourmand",
+      gender: "Unisex",
+      desc: "Rich tobacco, sweet vanilla & caramel — smoky sweetness with a gourmand twist",
+      img: "Perfume Pics/Tobacco Gourmand.png",
+      badge: "Gourmand",
+      price: 760
+    }
+  ];
+
+  let activeFilter = 'all';
+  const wishlist = new Set();
+
+  const waSVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+  const heartSVG = `<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+
+  function waMsg(name) {
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi! I saw your perfume collection and I'm interested in *${name}*. 🌸`)}`;
+  }
+
+  function toggleWishlist(name, btn) {
+    if (wishlist.has(name)) {
+      wishlist.delete(name);
+      btn.classList.remove('active');
+      showToast('Removed from wishlist');
+    } else {
+      wishlist.add(name);
+      btn.classList.add('active');
+      showToast('Added to wishlist ♥');
+    }
+  }
+
+  function buildCard(p) {
+    const imgSrc = p.img || '';
+    const isWished = wishlist.has(p.name);
+    return `
+      <div class="card" data-gender="${p.gender}" data-name="${p.name.toLowerCase()}" data-desc="${p.desc.toLowerCase()}">
+        <div class="img-wrap">
+          <img src="${imgSrc}" alt="${p.name}" onerror="this.style.opacity='0.2'" loading="lazy" />
+          ${p.badge ? `<div class="badge">${p.badge}</div>` : ''}
+          <button class="wishlist-btn${isWished ? ' active' : ''}" onclick="event.stopPropagation();toggleWishlist('${p.name.replace(/'/g,"\\'")}', this)" title="Add to wishlist">${heartSVG}</button>
+        </div>
+        <div class="info">
+          <div class="gender-tag">${p.gender}</div>
+          <div class="name">${p.name}</div>
+          <div class="desc">${p.desc}</div>
+          ${p.price ? `<div class="price">R ${p.price.toFixed(2)}</div>` : ''}
+          <a class="wa-btn" href="${waMsg(p.name)}" target="_blank">${waSVG} Chat to Buy</a>
+        </div>
+      </div>`;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('grid');
+    let html = '';
+    perfumes.forEach(p => { html += buildCard(p); });
+
+    // "Can't Find It?" card
+    html += `
+      <div class="cant-find-card" onclick="openCustomModal()">
+        <div class="cant-find-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5 L21 21" stroke-linecap="round"/><path d="M11 8v6M8 11h6" stroke-linecap="round"/></svg>
+        </div>
+        <div class="cant-find-title">Can't find what you want?</div>
+        <div class="cant-find-sub">Ask us — we'll check if it's available for you</div>
+      </div>`;
+
+    // No results banner (shown when search/filter returns nothing)
+    html += `
+      <div class="not-found-banner" id="no-results">
+        <div class="nf-icon">🔍</div>
+        <h3>We don't have that one yet</h3>
+        <p>We couldn't find a match in our current collection — but we may be able to source it for you!</p>
+        <button class="btn-ask" onclick="openCustomModalWithName()">
+          ${waSVG} Ask About Availability
+        </button>
+      </div>`;
+
+    grid.innerHTML = html;
+    applyFilter();
+  }
+
+  function filter(cat, btn) {
+    activeFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    applyFilter();
+  }
+
+  function applyFilter() {
+    const cards = document.querySelectorAll('.card');
+    const searchVal = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+    let visible = 0;
+
+    cards.forEach(c => {
+      const g = c.dataset.gender;
+      const n = c.dataset.name || '';
+      const d = c.dataset.desc || '';
+      const genderMatch = activeFilter === 'all' || g === activeFilter;
+      const searchMatch = !searchVal || n.includes(searchVal) || d.includes(searchVal);
+
+      if (genderMatch && searchMatch) {
+        c.classList.remove('hidden');
+        visible++;
+      } else {
+        c.classList.add('hidden');
+      }
+    });
+
+    const nr = document.getElementById('no-results');
+    if (nr) nr.style.display = visible === 0 ? 'block' : 'none';
+
+    const bar = document.getElementById('results-bar');
+    if (bar) {
+      if (searchVal || activeFilter !== 'all') {
+        bar.textContent = visible === 0 ? 'No results' : `${visible} fragrance${visible !== 1 ? 's' : ''} found`;
+      } else {
+        bar.textContent = '';
+      }
+    }
+  }
+
+  function applyTheme(theme) {
+    const body = document.body;
+    const button = document.getElementById('theme-toggle');
+    body.classList.toggle('dark-theme', theme === 'dark');
+    if (button) button.textContent = theme === 'dark' ? 'Light theme' : 'Dark theme';
+    localStorage.setItem('theme', theme);
+  }
+
+  function toggleTheme() {
+    const nextTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+    applyTheme(nextTheme);
+  }
+
+  function initTheme() {
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+    applyTheme(theme);
+  }
+
+  // ── CUSTOM REQUEST MODAL ──
+  let uploadedImageDataUrl = null;
+
+  function openCustomModal() {
+    document.getElementById('custom-modal').classList.add('open');
+  }
+
+  function openCustomModalWithName() {
+    const searchVal = document.getElementById('search-input')?.value || '';
+    openCustomModal();
+    setTimeout(() => {
+      const nameInput = document.getElementById('req-name');
+      if (nameInput && searchVal) nameInput.value = searchVal;
+    }, 50);
+  }
+
+  function closeCustomModal() {
+    document.getElementById('custom-modal').classList.remove('open');
+    ['req-name','req-notes','req-phone','req-msg'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    uploadedImageDataUrl = null;
+    const prev = document.getElementById('drop-preview');
+    const txt = document.getElementById('drop-text');
+    if (prev) { prev.style.display = 'none'; prev.src = ''; }
+    if (txt) txt.style.display = 'block';
+    const fi = document.getElementById('req-image'); if (fi) fi.value = '';
+  }
+
+  function handleImageUpload(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      uploadedImageDataUrl = e.target.result;
+      const prev = document.getElementById('drop-preview');
+      const txt = document.getElementById('drop-text');
+      if (prev) { prev.src = uploadedImageDataUrl; prev.style.display = 'block'; }
+      if (txt) txt.style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function sendCustomRequest() {
+    const name = document.getElementById('req-name').value.trim();
+    const notes = document.getElementById('req-notes').value.trim();
+    const phone = document.getElementById('req-phone').value.trim();
+    const msg = document.getElementById('req-msg').value.trim();
+
+    if (!name && !notes) { showToast('Please describe what you\'re looking for'); return; }
+
+    let text = `Hi! I'm looking for a fragrance that isn't in your current collection. 🌸\n\n`;
+    if (name) text += `*Fragrance:* ${name}\n`;
+    if (notes) text += `*Scent notes I love:* ${notes}\n`;
+    if (phone) text += `*My number:* ${phone}\n`;
+    if (msg) text += `\n*Extra info:* ${msg}`;
+    if (uploadedImageDataUrl) text += `\n\n_(I have a reference photo — I'll attach it below)_`;
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+    closeCustomModal();
+    showToast('Opening WhatsApp...');
+  }
+
+  // ── TOAST ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+
+  // Close modals on overlay click
+  document.getElementById('custom-modal').addEventListener('click', function(e) { if (e.target === this) closeCustomModal(); });
+
+  // Drag & drop styling
+  const dropZone = document.getElementById('drop-zone');
+  if (dropZone) {
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const input = document.getElementById('req-image');
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+        handleImageUpload(input);
+      }
+    });
+  }
+
+  initTheme();
+  renderGrid();
+</script>
 </body>
 </html>
