@@ -68,7 +68,7 @@
     position: relative;
     z-index: 10;
     text-align: center;
-    padding: 5rem 2rem 3rem;
+    padding: 3.5rem 2rem 3rem;
     border-bottom: 1px solid var(--border);
   }
 
@@ -121,24 +121,48 @@
     margin: 0 auto;
   }
 
+  /* ── TOP BAR ── */
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 2rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--background);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .top-bar-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
   .theme-toggle-wrap {
-    position: absolute;
-    top: 1.8rem;
-    right: 2rem;
+    display: flex;
+    align-items: center;
   }
 
   .theme-toggle {
     border: 1px solid var(--border);
     background: transparent;
     color: var(--text);
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 40px;
     font-family: 'Jost', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     letter-spacing: 1.5px;
     text-transform: uppercase;
     cursor: pointer;
     transition: background 0.2s, border-color 0.2s, color 0.2s;
+    white-space: nowrap;
   }
 
   .theme-toggle:hover {
@@ -146,7 +170,6 @@
     border-color: var(--gold);
   }
 
-  /* ── SEARCH + FILTERS ── */
   .search-wrap {
     display: flex;
     justify-content: center;
@@ -155,9 +178,14 @@
     z-index: 10;
   }
 
-  .search-input {
+  .search-inner {
+    position: relative;
     width: 100%;
     max-width: 380px;
+  }
+
+  .search-input {
+    width: 100%;
     padding: 10px 18px 10px 42px;
     border: 1px solid var(--border);
     border-radius: 40px;
@@ -174,7 +202,7 @@
 
   .search-wrap .search-icon {
     position: absolute;
-    left: calc(50% - 190px + 14px);
+    left: 14px;
     top: 50%;
     transform: translateY(-50%);
     width: 16px;
@@ -781,16 +809,64 @@
     50% { box-shadow: 0 4px 32px rgba(37,211,102,0.65); }
   }
 
+  /* ── SCROLL TO TOP ── */
+  .scroll-top {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s, border-color 0.2s;
+    transform: translateY(8px);
+  }
+
+  .scroll-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+  .scroll-top:hover { border-color: var(--gold); }
+  .scroll-top svg { width: 16px; height: 16px; fill: none; stroke: var(--text-muted); stroke-width: 2; }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
-    .grid { padding: 2rem 1rem 3rem; gap: 1.25rem; }
-    header { padding: 3rem 1.5rem 2rem; }
-    .modal { padding: 1.75rem; }
-    .search-wrap .search-icon { left: 28px; }
+    .grid { padding: 1.5rem 0.75rem 3rem; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    header { padding: 2.5rem 1.5rem 2rem; }
+    .modal { padding: 1.5rem; }
+    .top-bar { padding: 0.65rem 1rem; }
+    .top-bar-brand { font-size: 0.8rem; letter-spacing: 2px; }
+    .theme-toggle { padding: 0.4rem 0.75rem; font-size: 0.65rem; }
+    .img-wrap { height: 180px; }
+    .cant-find-card { min-height: 220px; }
+    header h1 { font-size: clamp(2rem, 8vw, 3.5rem); }
+    .filters { gap: 6px; padding: 1rem 0.75rem 0; }
+    .filter-btn { padding: 6px 14px; font-size: 0.68rem; }
+    .scroll-top { right: 1rem; bottom: 5.5rem; }
+    .wa-float { bottom: 1.2rem; right: 1rem; width: 48px; height: 48px; }
+    .wa-float svg { width: 24px; height: 24px; }
+    .modal-btns { flex-direction: column; }
+  }
+
+  @media (max-width: 380px) {
+    .grid { grid-template-columns: 1fr; }
+    .top-bar-brand { display: none; }
   }
 </style>
 </head>
 <body>
+
+<div class="top-bar">
+  <div class="top-bar-brand">The Scent Boutique</div>
+  <div class="theme-toggle-wrap">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">Dark theme</button>
+  </div>
+</div>
 
 <header>
   <div class="eyebrow">✦ Curated Luxury Collection ✦</div>
@@ -801,15 +877,14 @@
     <span></span>
   </div>
   <p>Discover your signature scent — chat with us on WhatsApp to order</p>
-  <div class="theme-toggle-wrap">
-    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">Dark theme</button>
-  </div>
 </header>
 
 <!-- Search -->
 <div class="search-wrap">
-  <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2" stroke="currentColor" fill="none"/><path d="M16.5 16.5 L21 21" stroke-width="2" stroke="currentColor" stroke-linecap="round"/></svg>
-  <input class="search-input" type="text" id="search-input" placeholder="Search by name or scent notes..." oninput="applyFilter()" />
+  <div class="search-inner">
+    <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" stroke-width="2" stroke="currentColor" fill="none"/><path d="M16.5 16.5 L21 21" stroke-width="2" stroke="currentColor" stroke-linecap="round"/></svg>
+    <input class="search-input" type="text" id="search-input" placeholder="Search by name or scent notes..." oninput="applyFilter()" />
+  </div>
 </div>
 
 <!-- Filters -->
@@ -875,6 +950,11 @@
   </div>
 </div>
 
+<!-- Scroll to top -->
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -884,7 +964,13 @@
 </a>
 
 <footer>
-  <p>The Scent Boutique &nbsp;✦&nbsp; All fragrances 100ml Eau de Parfum</p>
+  <div class="header-divider" style="margin-bottom:1.5rem;">
+    <span></span>
+    <svg viewBox="0 0 16 16" style="width:10px;height:10px;fill:var(--gold);opacity:0.5"><path d="M8 0 L9.5 6 L16 6 L10.8 9.8 L12.9 16 L8 12.2 L3.1 16 L5.2 9.8 L0 6 L6.5 6 Z"/></svg>
+    <span></span>
+  </div>
+  <p style="margin-bottom:0.4rem;">The Scent Boutique &nbsp;✦&nbsp; All fragrances 100ml Eau de Parfum</p>
+  <p style="margin-top:0.6rem;font-size:0.65rem;letter-spacing:1.5px;">Crafted with love · Durban, South Africa</p>
 </footer>
 
 <script>
@@ -1287,6 +1373,12 @@
       }
     });
   }
+
+  // Scroll to top visibility
+  window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scroll-top');
+    if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+  });
 
   initTheme();
   renderGrid();
